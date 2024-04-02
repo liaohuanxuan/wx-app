@@ -1,0 +1,13 @@
+<view>
+    <view class="cover">
+        <image src="/images/logo.jpg" class="logo" />
+    </view>
+    <view class="title" bind:tap="change">嗨 欢迎来到元岛</view>
+    <view class="desc">这里是小程序v1版本</view>
+    <view class="choose">
+        <navigator class="join" url="/pages/form/index">创建小组</navigator>
+        <navigator class="join" url="/pages/list/index">加入小组</navigator>
+        <navigator class="join" url="/pages/tip/index">其他小组</navigator>
+        <navigator class="join" url="/pages/group/index">我的小组</navigator>
+    </view>
+</view>
