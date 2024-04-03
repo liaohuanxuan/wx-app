@@ -3,7 +3,8 @@
     "pages/index/index",
     "pages/form/index",
     "pages/list/index",
-    "pages/tip/index"
+    "pages/tip/index",
+    "pages/group/index"
   ],
   "window": {
     "backgroundColor": "#F6F6F6",

@@ -3,15 +3,23 @@ Page({
         date: "",
         region: "",
         groupId: "",
+        loading: false,
+        infop:
+            "介绍基础情况，如你的学习进度，希望组员要做到的事，你小组的规则，学习安排，你能提供的帮助等，以便招到和你相符合的成员报名",
     },
     onLoad: function (e) {
         if (e.groupId) {
             this.setData({
                 groupId: e.groupId,
+                infop:
+                    "和小组长打个招呼吧~可以简单介绍一下自己的情况，未来大家将一起学习成为好友。",
             })
         }
     },
     submit: function (e) {
+        if (this.data.loading) {
+            return;
+        }
         let u = e.detail.value;
         if (this.data.groupId) { //已经有groupID 加入小组
             wx.cloud.callFunction({
@@ -62,7 +70,11 @@ Page({
                     },
                 },
             }).then((res) => {
+                wx.setStorageSync("groupId", res.result.groupId);
                 console.log(res);
+                wx.redirectTo({
+                    url: "/pages/tip/index?groupId=" + String(res.result.groupId),
+                });
             });
         }
 

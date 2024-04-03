@@ -7,42 +7,52 @@ cloud.init({
 const db = cloud.database();
 
 module.exports = async (event) => {
-    let u = event.data;
-    //   userId? 一般来说是自行实现，小程序提供了openid比较方便
-    let wxContext = cloud.getWXContext();
-    let openId = wxContext.OPENID;
-    // 想要递增小组id怎么办
-    let res = await db.collection("test-group").count();
-    let groupId = parseInt(res.total) + 1;
-    // 严格项目需要事务功能，可以自行搜索并查看文档
-    await db.collection("test-group").add({
-        data: {
-            leader: u.nickname,
-            region: u.region,
-            code: u.code,
-            age: u.age,
-            info: u.info,
-            member: 1,
-            openId,
+    try {
+
+
+        let u = event.data;
+        //   userId? 一般来说是自行实现，小程序提供了openid比较方便
+        let wxContext = cloud.getWXContext();
+        let openId = wxContext.OPENID;
+        // 想要递增小组id怎么办
+        let res = await db.collection("test-group").count();
+        let groupId = parseInt(res.total) + 1;
+        // 严格项目需要事务功能，可以自行搜索并查看文档
+        await db.collection("test-group").add({
+            data: {
+                leader: u.nickname,
+                region: u.region,
+                code: u.code,
+                age: u.age,
+                info: u.info,
+                member: 1,
+                openId,
+                groupId,
+            },
+        });
+        await db.collection("test-form").add({
+            data: {
+                nickname: u.nickname,
+                gender: u.gender === "nv",
+                region: u.region,
+                code: u.code,
+                age: u.age,
+                info: u.info,
+                isLeader: true,
+                openId,
+                groupId,
+            },
+        });
+        return {
+            success: true,
             groupId,
-        },
-    });
-    await db.collection("test-form").add({
-        data: {
-            nickname: u.nickname,
-            gender: u.gender === "nv",
-            region: u.region,
-            code: u.code,
-            age: u.age,
-            info: u.info,
-            isLeader: true,
-            openId,
-            groupId,
-        },
-    });
-    return {
-        success: true,
-    };
+        };
+    } catch (error) {
+        return {
+            success: false,
+            errorMessage: error.message,
+        }
+    }
 };
 
 
